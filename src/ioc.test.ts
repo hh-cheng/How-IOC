@@ -21,4 +21,30 @@ describe('IOC', () => {
     expect(controller.service).toBeInstanceOf(Service)
     expect(controller.service.getName()).toBe('A')
   })
+
+  it('should handle mixed injected and non-injected parameters', () => {
+    @Injectable()
+    class Logger {
+      log(msg: string) {
+        return `LOG: ${msg}`
+      }
+    }
+
+    class MixedController {
+      constructor(
+        @Inject() readonly service: Service,
+        readonly config: string,
+        @Inject() readonly logger: Logger,
+      ) {}
+    }
+
+    const controller = resolve(MixedController)
+
+    // Injected parameters work
+    expect(controller.service).toBeInstanceOf(Service)
+    expect(controller.logger).toBeInstanceOf(Logger)
+
+    // Non-injected parameter is undefined
+    expect(controller.config).toBeUndefined()
+  })
 })
