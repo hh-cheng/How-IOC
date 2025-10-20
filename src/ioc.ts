@@ -54,7 +54,7 @@ export function resolve<T>(target: Constructor<T>): T {
       return resolve(ServiceConstructor as Constructor<unknown>)
     }
     // For non-injected parameters, pass undefined
-    return undefined
+    return
   })
 
   // Instantiate the target class with resolved dependencies
