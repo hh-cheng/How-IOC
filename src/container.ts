@@ -1,17 +1,13 @@
 import { Constructor } from './types'
 
 class IOCContainer {
-  private readonly services: Map<symbol, new () => unknown> = new Map()
+  private readonly services: Map<symbol, Constructor<unknown>> = new Map()
 
-  register<T>(token: symbol, service: new () => T) {
-    this.services.set(token, service)
+  register<T>(token: symbol, service: Constructor<T>) {
+    this.services.set(token, service as Constructor<unknown>)
   }
 
-  get(token: symbol) {
-    if (!this.services.has(token)) {
-      throw new Error(`Service ${String(token)} not found`)
-    }
-
+  get(token: symbol): Constructor<unknown> | undefined {
     return this.services.get(token)
   }
 }

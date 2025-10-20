@@ -1,22 +1,24 @@
 import 'reflect-metadata'
 import { describe, it, expect } from 'vitest'
 
-import { Inject, Injectable } from './ioc'
+import { Inject, Injectable, resolve } from './ioc'
+
+@Injectable()
+class Service {
+  getName() {
+    return 'A'
+  }
+}
+
+@Injectable()
+class Controller {
+  constructor(@Inject() readonly service: Service) {}
+}
 
 describe('IOC', () => {
   it('should be able to inject dependencies', () => {
-    @Injectable()
-    class Service {
-      getName() {
-        return 'A'
-      }
-    }
-
-    const service = new Service()
-
-    // class Controller {
-    //   constructor(@Inject() private readonly service: Service) {}
-    // }
-    expect(1).toBe(1)
+    const controller = resolve(Controller)
+    expect(controller.service).toBeInstanceOf(Service)
+    expect(controller.service.getName()).toBe('A')
   })
 })
