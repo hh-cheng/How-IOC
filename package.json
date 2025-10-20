@@ -4,7 +4,8 @@
   "description": "IOC implementation in TypeScript",
   "scripts": {
     "prepare": "husky",
-    "lint": "biome check --write --no-errors-on-unmatched"
+    "lint": "biome check --write --no-errors-on-unmatched",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
