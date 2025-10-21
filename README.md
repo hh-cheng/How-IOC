@@ -72,30 +72,30 @@ sequenceDiagram
 
 ```mermaid
 graph TB
-    subgraph "装饰器层 (Decorator Layer)"
-        A[@Injectable] --> B[注册类到容器]
-        C[@Inject] --> D[标记参数索引]
+    subgraph 装饰器层_Decorator_Layer
+        A[Injectable] --> B[注册类到容器]
+        C[Inject] --> D[标记参数索引]
     end
-    
-    subgraph "元数据层 (Metadata Layer)"
+
+    subgraph 元数据层_Metadata_Layer
         E[Reflect.defineMetadata] --> F[Symbol inject: 参数索引]
         G[TypeScript emitDecoratorMetadata] --> H[design:paramtypes: 类型数组]
     end
-    
-    subgraph "容器层 (Container Layer)"
+
+    subgraph 容器层_Container_Layer
         I[IOCContainer] --> J[Map: Symbol → Constructor]
         J --> K[register 注册]
         J --> L[get 获取]
     end
-    
-    subgraph "解析层 (Resolution Layer)"
+
+    subgraph 解析层_Resolution_Layer
         M[resolve 函数] --> N[读取 paramtypes]
         M --> O[读取 inject 标记]
         M --> P[从容器获取依赖]
         M --> Q[递归解析依赖]
         M --> R[实例化目标类]
     end
-    
+
     A --> E
     C --> E
     B --> K
@@ -103,41 +103,43 @@ graph TB
     O --> F
     P --> L
     Q --> M
-    
+
     style A fill:#e1f5ff
     style C fill:#e1f5ff
     style I fill:#fff4e1
     style M fill:#e8f5e9
 ```
 
+
+
 ## 数据流示例 (Data Flow Example)
 
 ```mermaid
-graph LR
+flowchart TB
     subgraph "定义时 (Definition Time)"
-        A[Service 类] -->|@Injectable| B[容器存储 Service]
-        C[Controller 类] -->|@Injectable| D[容器存储 Controller]
-        E[@Inject 参数0] -->|元数据| F[标记: 0需注入]
-        G[TypeScript] -->|编译| H[类型: Service]
+        A[Service Class] -->|Injectable| B[Container Store Service]
+        C[Controller Class] -->|Injectable| D[Container Store Controller]
+        E[Inject Parameter 0] -->|Metadata| F[Tag Need Injection 0]
+        G[TypeScript] -->|Compile| H[Type Service]
     end
-    
+
     subgraph "运行时 (Runtime)"
-        I[resolve Controller] --> J{读取元数据}
-        J --> K[参数类型: Service]
-        J --> L[注入索引: 0]
-        K --> M[查找容器]
-        M --> N[获取 Service 构造器]
-        N --> O[resolve Service]
-        O --> P[new Service]
-        P --> Q[new Controller service]
-        Q --> R[返回实例]
+        I[Resolve Controller] --> J{Read Metadata}
+        J --> K[Parameter Type Service]
+        J --> L[Injection Index 0]
+        K --> M[Find Container]
+        M --> N[Get Service Constructor]
+        N --> O[Resolve Service]
+        O --> P[New Service]
+        P --> Q[New Controller Service]
+        Q --> R[Return Instance]
     end
-    
+
     B -.-> M
     D -.-> I
     F -.-> L
     H -.-> K
-    
+
     style I fill:#ffebee
     style R fill:#c8e6c9
 ```
